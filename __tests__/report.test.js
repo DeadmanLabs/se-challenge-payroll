@@ -109,11 +109,3 @@ describe('Payroll Report API Tests', () => {
         });
     });
 });
-
-/*
-
-Mikes Notes
-
-Note that we do not handle specific database errors, only what happens if any error occurs
-
-*/

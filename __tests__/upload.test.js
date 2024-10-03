@@ -81,13 +81,3 @@ describe('File Upload API Tests', () => {
         });
     });
 });
-
-/*
-
-Mikes Notes
-
-Note that we do not test non-csv data with a .csv ending
-Note that we do not test database functionality or error handling
-
-
-*/

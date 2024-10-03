@@ -1,16 +1,16 @@
 # Wave Payroll Report Generator
 
-The **Payroll Report Generator** is a scalable, secure, and extensible API built in **Node.js** that enables CSV file uploads for payroll data processing and provides a REST endpoint for retrieving payroll reports. 
+The **Payroll Report Generator** is an API built in **Node.js** that enables CSV file uploads for payroll data processing and provides a REST endpoint for retrieving payroll reports. 
 
 ## Technologies Used
 
-This project utilizes several open-source technologies to ensure performance, scalability, and security:
+This project utilizes several open-source technologies:
 
 - **Node.js**: The backbone of our backend, handling event-driven and non-blocking operations efficiently.
 - **Express**: A fast and minimalist web framework for handling routing and middleware.
-- **PostgreSQL**: A relational database used for storing payroll data, offering ACID compliance and excellent support for handling structured data.
-- **Multer**: A middleware for handling multipart/form-data, primarily for secure and efficient file uploads.
-- **CSV Parser**: To read and parse CSV files, enabling structured data extraction.
+- **PostgreSQL**: A relational database used for storing payroll data.
+- **Multer**: A middleware for handling multipart/form-data, primarily for file uploads.
+- **CSV Parser**: To read and parse CSV files.
 - **Jest**: A testing framework that allows us to perform unit and integration testing for all endpoints.
 - **Supertest**: An HTTP assertion library used for testing REST API endpoints.
 
@@ -28,7 +28,7 @@ This project utilizes several open-source technologies to ensure performance, sc
 - Secure CSV file upload with real-time validation.
 - Data stored in a relational database (PostgreSQL) for querying and reporting.
 - REST API for retrieving payroll reports based on uploaded data.
-- Automated tests to ensure the API works as expected in all scenarios.
+- Automated tests to ensure the API works as expected in many scenarios.
 - Scalable architecture for future enhancements and increased traffic.
 
 ## Project Structure (Fix)
@@ -39,11 +39,11 @@ This project utilizes several open-source technologies to ensure performance, sc
 ├── package.json  # Logic for handling business operations 
 ├── production.js # Production level test that uses the database and proper API calls
 ├── __tests__     # Unit and integration tests 
-|        ├── empty.csv       # Empty CSV file for testing
-|        ├── valid.csv       # Valid CSV file for testing 
-|        ├── invalid.txt     # Invalid file for testing 
-|        ├── report.test.js  # Unit tests of reporting endpoint 
-|        └── upload.test.js  # Unit tests of upload endpoint 
+|        ├── time-report-1.csv  # Valid CSV file for testing 
+|        ├── time-report-2.csv  # Empty CSV file for testing
+|        ├── time-report-3.txt  # Invalid file for testing 
+|        ├── report.test.js     # Unit tests of reporting endpoint 
+|        └── upload.test.js     # Unit tests of upload endpoint 
 └── README.md     # Project documentation
 ```
 
@@ -58,8 +58,8 @@ This project utilizes several open-source technologies to ensure performance, sc
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/yourorg/payroll-report-generator.git
-    cd payroll-report-generator
+    git clone https://github.com/DeadmanLabs/se-challenge-payroll.git
+    cd se-challenge-payroll
     ```
 
 2. Install dependencies:
@@ -95,7 +95,7 @@ This project utilizes several open-source technologies to ensure performance, sc
     ```
 4. Run the application:
     ```sh
-    npm start
+    node index.js
     ```
 5. (Optional) Run tests    
     ```sh
@@ -103,7 +103,7 @@ This project utilizes several open-source technologies to ensure performance, sc
     ```
     
 # Test Coverage
-Our tests are designed to ensure that the application handles all expected cases efficiently:
+The tests are designed to ensure that the application handles all expected cases efficiently:
 
 ## Unit tests: 
 - Verify the correct functionality of individual modules, including pay period calculations and CSV parsing.
