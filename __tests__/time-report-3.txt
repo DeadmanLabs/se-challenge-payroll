@@ -1,0 +1,1 @@
+Text file as an example, works for all non.csv files.

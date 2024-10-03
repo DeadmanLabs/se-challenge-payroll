@@ -1,153 +1,153 @@
-# Wave Software Development Challenge
+# Wave Payroll Report Generator
 
-Applicants for the Full-stack Developer role at Wave must
-complete the following challenge, and submit a solution prior to the onsite
-interview.
+The **Payroll Report Generator** is a scalable, secure, and extensible API built in **Node.js** that enables CSV file uploads for payroll data processing and provides a REST endpoint for retrieving payroll reports. 
 
-The purpose of this exercise is to create something that we can work on
-together during the onsite. We do this so that you get a chance to collaborate
-with Wavers during the interview in a situation where you know something better
-than us (it's your code, after all!)
+## Technologies Used
 
-There isn't a hard deadline for this exercise; take as long as you need to
-complete it. However, in terms of total time spent actively working on the
-challenge, we ask that you not spend more than a few hours, as we value your
-time and are happy to leave things open to discussion in the on-site interview.
+This project utilizes several open-source technologies to ensure performance, scalability, and security:
 
-Please use whatever programming language and framework you feel the most
-comfortable with.
+- **Node.js**: The backbone of our backend, handling event-driven and non-blocking operations efficiently.
+- **Express**: A fast and minimalist web framework for handling routing and middleware.
+- **PostgreSQL**: A relational database used for storing payroll data, offering ACID compliance and excellent support for handling structured data.
+- **Multer**: A middleware for handling multipart/form-data, primarily for secure and efficient file uploads.
+- **CSV Parser**: To read and parse CSV files, enabling structured data extraction.
+- **Jest**: A testing framework that allows us to perform unit and integration testing for all endpoints.
+- **Supertest**: An HTTP assertion library used for testing REST API endpoints.
 
-Feel free to email [dev.careers@waveapps.com](dev.careers@waveapps.com) if you
-have any questions.
+## Why I Used These Technologies
 
-## Project Description
+- **Node.js**: Chosen for its asynchronous nature, which is ideal for handling multiple requests concurrently and providing a scalable API.
+- **Express**: Enables clean, modular routing and a wide variety of middleware to handle requests and responses efficiently.
+- **PostgreSQL**: Ideal for storing and querying structured data, like payroll entries. It ensures data consistency and supports complex queries needed for payroll report generation.
+- **Multer**: Provides secure handling of file uploads while enforcing file size and type limitations to protect the server from malicious files.
+- **Jest**: Offers a simple yet powerful framework for writing comprehensive unit and integration tests, ensuring the reliability of our API.
+- **Supertest**: Integrates seamlessly with Jest to test HTTP endpoints, allowing us to simulate various request scenarios like file uploads and API responses.
 
-Imagine that this is the early days of Wave's history, and that we are prototyping a new payroll system API. A front end (that hasn't been developed yet, but will likely be a single page application) is going to use our API to achieve two goals:
+## Features
 
-1. Upload a CSV file containing data on the number of hours worked per day per employee
-1. Retrieve a report detailing how much each employee should be paid in each _pay period_
+- Secure CSV file upload with real-time validation.
+- Data stored in a relational database (PostgreSQL) for querying and reporting.
+- REST API for retrieving payroll reports based on uploaded data.
+- Automated tests to ensure the API works as expected in all scenarios.
+- Scalable architecture for future enhancements and increased traffic.
 
-All employees are paid by the hour (there are no salaried employees.) Employees belong to one of two _job groups_ which determine their wages; job group A is paid $20/hr, and job group B is paid $30/hr. Each employee is identified by a string called an "employee id" that is globally unique in our system.
+## Project Structure (Fix)
+```
+├── index.js      # Main application logic 
+├── ensure.js     # Helper appliaction that builds database and tables
+├── schema.sql    # Contains schema of the tables created in ensure.js
+├── package.json  # Logic for handling business operations 
+├── production.js # Production level test that uses the database and proper API calls
+├── __tests__     # Unit and integration tests 
+|        ├── empty.csv       # Empty CSV file for testing
+|        ├── valid.csv       # Valid CSV file for testing 
+|        ├── invalid.txt     # Invalid file for testing 
+|        ├── report.test.js  # Unit tests of reporting endpoint 
+|        └── upload.test.js  # Unit tests of upload endpoint 
+└── README.md     # Project documentation
+```
 
-Hours are tracked per employee, per day in comma-separated value files (CSV).
-Each individual CSV file is known as a "time report", and will contain:
+## Installation
 
-1. A header, denoting the columns in the sheet (`date`, `hours worked`,
-   `employee id`, `job group`)
-1. 0 or more data rows
+### Prerequisites
+- [Node.js](https://nodejs.org/) v22.8.0+ 
+- [PostgreSQL](https://www.postgresql.org/) v17+ 
 
-In addition, the file name should be of the format `time-report-x.csv`,
-where `x` is the ID of the time report represented as an integer. For example, `time-report-42.csv` would represent a report with an ID of `42`.
+### Step-by-step Setup
 
-You can assume that:
+1. Clone the repository:
 
-1. Columns will always be in that order.
-1. There will always be data in each column and the number of hours worked will always be greater than 0.
-1. There will always be a well-formed header line.
-1. There will always be a well-formed file name.
+    ```sh
+    git clone https://github.com/yourorg/payroll-report-generator.git
+    cd payroll-report-generator
+    ```
 
-A sample input file named `time-report-42.csv` is included in this repo.
+2. Install dependencies:
 
-### What your API must do:
+    ```sh
+    npm install
+    ```
 
-We've agreed to build an API with the following endpoints to serve HTTP requests:
+3. Setup the PostgreSQL database:
+- Ensure that the server is started with the following details:
+    ```sh
+    Username: postgres
+    Password: password
+    Host: 127.0.0.1 / localhost
+    Port: 5433
+    Database: 'postgres' #Management DB
+    ```
+    !Note that the above information is NOT SAFE for a production environment
+- Create a PostgreSQL database named payroll_db and create tables:
+    ```sh
+    node ensure.js
+    ```
+    Output:
+    ```bash
+    D:\Code>node ensure.js
+    Connected to database 'postgres'
+    Database 'timekeeping' does not exist. Creating...
+    Database 'timekeeping' created successfully.
+    Database connection closed.
+    Connected to database 'timekeeping' for schema setup.
+    Database schema applied successfully.
+    Schema setup connection closed.
+    ```
+4. Run the application:
+    ```sh
+    npm start
+    ```
+5. (Optional) Run tests    
+    ```sh
+    npm test
+    ```
+    
+# Test Coverage
+Our tests are designed to ensure that the application handles all expected cases efficiently:
 
-1. An endpoint for uploading a file.
+## Unit tests: 
+- Verify the correct functionality of individual modules, including pay period calculations and CSV parsing.
+- Test the end-to-end behavior of API routes using mock database queries and file uploads.
+# Test Scenarios
+I have written the following tests:
 
-   - This file will conform to the CSV specifications outlined in the previous section.
-   - Upon upload, the timekeeping information within the file must be stored to a database for archival purposes.
-   - If an attempt is made to upload a file with the same report ID as a previously uploaded file, this upload should fail with an error message indicating that this is not allowed.
+### Payroll Report API Tests:
 
-2. An endpoint for retrieving a payroll report structured in the following way:
+- Valid Payroll Report: Verifies that the payroll report is generated correctly when valid data exists.
+- Empty Report: Ensures that an empty payroll report is returned when no data exists in the database.
+- Database Error Handling: Tests if the API gracefully handles errors from the database.
 
-   _NOTE:_ It is not the responsibility of the API to return HTML, as we will delegate the visual layout and redering to the front end. The expectation is that this API will only return JSON data.
+### File Upload API Tests:
 
-   - Return a JSON object `payrollReport`.
-   - `payrollReport` will have a single field, `employeeReports`, containing a list of objects with fields `employeeId`, `payPeriod`, and `amountPaid`.
-   - The `payPeriod` field is an object containing a date interval that is roughly biweekly. Each month has two pay periods; the _first half_ is from the 1st to the 15th inclusive, and the _second half_ is from the 16th to the end of the month, inclusive. `payPeriod` will have two fields to represent this interval: `startDate` and `endDate`.
-   - Each employee should have a single object in `employeeReports` for each pay period that they have recorded hours worked. The `amountPaid` field should contain the sum of the hours worked in that pay period multiplied by the hourly rate for their job group.
-   - If an employee was not paid in a specific pay period, there should not be an object in `employeeReports` for that employee + pay period combination.
-   - The report should be sorted in some sensical order (e.g. sorted by employee id and then pay period start.)
-   - The report should be based on all _of the data_ across _all of the uploaded time reports_, for all time.
+- Successful File Upload: Verifies that a valid CSV file is uploaded and processed correctly.
+- Empty CSV File: Ensures that uploading an empty CSV returns an appropriate error message.
+- No File Provided: Tests that the server responds with an error when no file is uploaded.
+- Non-CSV File Upload: Ensures that attempting to upload a non-CSV file returns an error.
 
-As an example, given the upload of a sample file with the following data:
+# Example Test Output
+```bash
 
-   | date       | hours worked | employee id | job group |
-   | ---------- | ------------ | ----------- | --------- |
-   | 4/1/2023   | 10           | 1           | A         |
-   | 14/1/2023  | 5            | 1           | A         |
-   | 20/1/2023  | 3            | 2           | B         |
-   | 20/1/2023  | 4            | 1           | A         |
+> wavetest@1.0.0 test
+> set NODE_ENV=test&& jest
 
-A request to the report endpoint should return the following JSON response:
+(node:1060) [DEP0044] DeprecationWarning: The `util.isArray` API is deprecated. Please use `Array.isArray()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ PASS  __tests__/upload.test.js
+ PASS  __tests__/report.test.js
 
-   ```json
-   {
-     "payrollReport": {
-       "employeeReports": [
-         {
-           "employeeId": "1",
-           "payPeriod": {
-             "startDate": "2023-01-01",
-             "endDate": "2023-01-15"
-           },
-           "amountPaid": "$300.00"
-         },
-         {
-           "employeeId": "1",
-           "payPeriod": {
-             "startDate": "2023-01-16",
-             "endDate": "2023-01-31"
-           },
-           "amountPaid": "$80.00"
-         },
-         {
-           "employeeId": "2",
-           "payPeriod": {
-             "startDate": "2023-01-16",
-             "endDate": "2023-01-31"
-           },
-           "amountPaid": "$90.00"
-         }
-       ]
-     }
-   }
-   ```
+Test Suites: 2 passed, 2 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.71 s, estimated 1 s
+Ran all test suites.
 
-We consider ourselves to be language agnostic here at Wave, so feel free to use any combination of technologies you see fit to both meet the requirements and showcase your skills. We only ask that your submission:
+```
 
-- Is easy to set up
-- Can run on either a Linux or Mac OS X developer machine
-- Does not require any non open-source software
-- Includes all the source code you write for the submission, including any models used for setting up your database
+# Question Answers
 
-### Documentation:
-
-Please commit the following to this `README.md`:
-
-1. Instructions on how to build/run your application
-1. Answers to the following questions:
-   - How did you test that your implementation was correct?
-   - If this application was destined for a production environment, what would you add or change?
-   - What compromises did you have to make as a result of the time constraints of this challenge?
-
-## Submission Instructions
-
-1. Clone the repository.
-1. Complete your project as described above within your local repository.
-1. Ensure everything you want to commit is committed.
-1. Create a git bundle: `git bundle create your_name.bundle --all`
-1. Email the bundle file to [dev.careers@waveapps.com](dev.careers@waveapps.com) and CC the recruiter you have been in contact with.
-
-## Evaluation
-
-Evaluation of your submission will be based on the following criteria.
-
-1. Did you follow the instructions for submission?
-1. Did you complete the steps outlined in the _Documentation_ section?
-1. Were models/entities and other components easily identifiable to the
-   reviewer?
-1. What design decisions did you make when designing your models/entities? Are
-   they explained?
-1. Did you separate any concerns in your application? Why or why not?
-1. Does your solution use appropriate data types for the problem as described?
+## 1. How did I test the implementation
+I wrote tests through jest for the testing of the backend, as it is the industry standard for node.js applications. Jest can also easily be integrated with GitHub Actions, so using jest for testing allows for futher development of the codebase to be automatically tested and or deployed if needed.
+## 2. How would the application change in a production environment
+In a production environment, I would be a lot more scrutinous of the database interactions. I only tested for generic database failures for this application, and not specific errors like malformed data or injections, which in a production environment would be very important to ensure a secure applcation. I also have produced this application in a windows environment, which depending on conditions, could cause issues with other platforms. If I was pushing to production, I would have designed the application inside a docker container so that cross-platform compatability would not have been an issue.
+## 3. What compromises did I make as a result of timing
+If given more time, I most definately would have spent more time writing my unit tests. Currently I only test one successful case, and one case of a few possible errors. This is, in my opinion, not comprihensive enough for an application that would be going into production. I also would want more security features like proper CORS rules and HTTPS communication for a public facing API. The last compromise I will talk about is that I did not write this API inside a docker container or with any sort of scaling framework like nginx. This would be a massive issue for the application as the userbase grows, as a single node.js instance is not intended to handle more than 15,000 requests per second. I would also have liked to add proper logging to the API, so that as a developer, I could get analytics as well as insight into what errors are occuring, as well as when and why.

@@ -1,0 +1,23 @@
+{
+  "name": "wavetest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "set NODE_ENV=test&& jest"
+  },
+  "keywords": [],
+  "author": "Michael Magahey",
+  "license": "ISC",
+  "description": "Wave Coding Challenge: Full-Stack Developer",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "csv-parser": "^3.0.0",
+    "express": "^4.21.0",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
